@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/authStore';
-import { Juice } from 'lucide-react';
+import { GlassWater } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function LoginPage() {
@@ -49,7 +49,7 @@ export default function LoginPage() {
     <div className="w-full max-w-sm">
       <div className="text-center mb-8">
         <div className="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-          <Juice className="w-8 h-8 text-white" />
+          <GlassWater className="w-8 h-8 text-white" />
         </div>
         <h1 className="text-2xl font-display font-bold text-neutral-800">
           Gilang Fresh Juice
