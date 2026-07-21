@@ -1,0 +1,43 @@
+name: 🚀 Deploy ke Cloudflare Pages
+
+    on:
+    push:
+      branches:
+        - main
+    workflow_dispatch:
+
+    jobs:
+    deploy:
+      name: Build & Deploy
+      runs-on: ubuntu-latest
+      timeout-minutes: 15
+
+      steps:
+        - name: 📥 Checkout repo
+          uses: actions/checkout@v4
+
+        - name: 🟢 Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+            cache: 'npm'
+
+        - name: 📦 Install dependencies
+          run: npm ci
+
+        - name: 🔨 Build Next.js (static export)
+          run: npm run build
+          env:
+            NEXT_PUBLIC_SUPABASE_URL: https://dwxbtedloguqgpsyahjc.supabase.co
+            NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+            NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
+            NEXT_PUBLIC_APP_NAME: Gilang Fresh Juice
+            NEXT_PUBLIC_APP_URL: https://gilang-fresh-juice.pages.dev
+
+        - name: ☁️ Deploy ke Cloudflare Pages
+          uses: cloudflare/wrangler-action@v3
+          with:
+            apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+            accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+            command: pages deploy dist --project-name=gilang-fresh-juice --commit-dirty=true
+    
