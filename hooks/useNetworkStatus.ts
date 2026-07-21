@@ -29,9 +29,9 @@ export function useNetworkStatus() {
       setIsSyncing(true);
       try {
         const registration = await navigator.serviceWorker.ready;
-        await registration.sync.register('sync-sales');
-        await registration.sync.register('sync-expenses');
-        await registration.sync.register('sync-stock');
+        await (registration as any).sync.register('sync-sales');
+        await (registration as any).sync.register('sync-expenses');
+        await (registration as any).sync.register('sync-stock');
       } catch (e) {
         console.error('Background sync failed:', e);
       }
