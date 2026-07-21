@@ -2,7 +2,9 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: false,
-  disable: process.env.NODE_ENV === 'development',
+  disable: false, // JANGAN disable di dev agar push notif bisa ditest
+  // importScripts langsung di top-level untuk next-pwa v5.x (bukan di dalam workboxOptions)
+  importScripts: ['/sw-custom.js'],
   runtimeCaching: [
     {
       urlPattern: /^\/_next\/static/,
