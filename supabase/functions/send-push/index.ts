@@ -2,9 +2,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || 'https://dwxbtedloguqgpsyahjc.supabase.co';
 const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
-const vapidPrivateKey = 'p-fkd62sKtwZO98lEmVjXvk32x7T8WP_Feb2iRXqGKE';
-const vapidPublicKey = 'BAPUe4B8WVjazZ4G8ukncjsmrZkh-6nWjW-RXyubZp6a5ZxFXH_2Arm8IxQ4weDY2POsRasSLQjUOWSOjQ5iYN8';
-const vapidSubject = 'mailto:admin@gilangfreshjuice.com';
+const vapidPrivateKey = Deno.env.get('VAPID_PRIVATE_KEY') || '';
+const vapidPublicKey = Deno.env.get('VAPID_PUBLIC_KEY') || 'BAPUe4B8WVjazZ4G8ukncjsmrZkh-6nWjW-RXyubZp6a5ZxFXH_2Arm8IxQ4weDY2POsRasSLQjUOWSOjQ5iYN8';
+const vapidSubject = Deno.env.get('VAPID_SUBJECT') || 'mailto:admin@gilangfreshjuice.com';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
