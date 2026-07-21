@@ -1,14 +1,53 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Shield, Store } from 'lucide-react';
+import { subscribePush, unsubscribePush } from '@/lib/push';
+import { LogOut, User, Shield, Store, Bell, BellOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function SettingsPage() {
   const { profile, logout } = useAuthStore();
   const router = useRouter();
+  const [pushEnabled, setPushEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const isOwner = profile?.role === 'owner';
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.pushManager.getSubscription().then((subscription) => {
+          setPushEnabled(!!subscription);
+        });
+      });
+    }
+  }, []);
+
+  const handleTogglePush = async () => {
+    if (!profile?.id) return;
+    setIsLoading(true);
+
+    try {
+      if (pushEnabled) {
+        await unsubscribePush(profile.id);
+        setPushEnabled(false);
+        toast.success('Notifikasi dimatikan');
+      } else {
+        const success = await subscribePush(profile.id);
+        if (success) {
+          setPushEnabled(true);
+          toast.success('Notifikasi diaktifkan');
+        } else {
+          toast.error('Gagal mengaktifkan notifikasi');
+        }
+      }
+    } catch (err) {
+      toast.error('Terjadi kesalahan');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -40,6 +79,38 @@ export default function SettingsPage() {
                 </span>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Push Notification Toggle */}
+        <div className="bg-white rounded-md border border-neutral-100 p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {pushEnabled ? (
+                <Bell size={18} className="text-primary-500" />
+              ) : (
+                <BellOff size={18} className="text-neutral-400" />
+              )}
+              <div>
+                <p className="text-sm font-medium text-neutral-800">Notifikasi Push</p>
+                <p className="text-xs text-neutral-400">
+                  {pushEnabled ? 'Aktif' : 'Nonaktif'}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleTogglePush}
+              disabled={isLoading}
+              className={`relative w-12 h-7 rounded-full transition-colors ${
+                pushEnabled ? 'bg-primary-500' : 'bg-neutral-200'
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${
+                  pushEnabled ? 'translate-x-5' : 'translate-x-0.5'
+                }`}
+              />
+            </button>
           </div>
         </div>
 
