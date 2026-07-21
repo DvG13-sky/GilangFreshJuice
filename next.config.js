@@ -1,9 +1,8 @@
-const withPWA = require('next-pwa')({
+const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
   register: true,
   skipWaiting: false,
-  disable: false, // JANGAN disable di dev agar push notif bisa ditest
-  // importScripts langsung di top-level untuk next-pwa v5.x (bukan di dalam workboxOptions)
+  disable: false,
   importScripts: ['/sw-custom.js'],
   runtimeCaching: [
     {
