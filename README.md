@@ -1,4 +1,4 @@
-# Gilang Fresh Juice Manager
+# Gilang Fresh Juice Manager.
 
 Sistem Tata Kelola Gerai Jus â€” PWA dengan Push Notification & Auto Deploy.
 
